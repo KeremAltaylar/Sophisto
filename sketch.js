@@ -21,6 +21,7 @@ var sw1 = fxrandRange(0.1, 0.5, 0.1);
 var sw2 = fxrandRange(0.1, 0.5, 0.1);
 var mes1a = fxrandRange(0.1, 4, 0.1);
 var mes2a = fxrandRange(0.1, 8, 0.1);
+var resizeDebounceId = null;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -142,7 +143,8 @@ function draw() {
   indexk = indexk + 1;
   //console.log(indexk);
 }
-function windowResized() {
+
+function restartSketch() {
   resizeCanvas(windowWidth, windowHeight);
   indexk = 0;
   loop();
@@ -218,6 +220,25 @@ function windowResized() {
   //   windowHeight / 2 - 30
   // );
   pop();
+}
+
+function mousePressed() {
+  restartSketch();
+}
+
+function touchStarted() {
+  restartSketch();
+  return false;
+}
+
+function windowResized() {
+  if (resizeDebounceId !== null) {
+    clearTimeout(resizeDebounceId);
+  }
+  resizeDebounceId = setTimeout(function () {
+    restartSketch();
+    resizeDebounceId = null;
+  }, 100);
 }
 
 function fxrandRange(min, max, step) {
